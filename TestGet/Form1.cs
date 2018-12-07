@@ -23,7 +23,7 @@ namespace TestGet
             InitializeComponent();
             Timer time = new Timer();
             time.Enabled = true;
-            time.Interval = 3000;
+            time.Interval = 5000;
             time.Tick += new EventHandler(timer1_Tick);
             time.Start();
         }
