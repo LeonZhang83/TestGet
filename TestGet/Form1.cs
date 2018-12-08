@@ -14,41 +14,32 @@ namespace TestGet
 {
     public partial class Form1 : Form
     {
-
-        string finalResult ="";
+        string finalResult = "";
         string result = "";
 
         public Form1()
         {
             InitializeComponent();
-            Timer time = new Timer();
-            time.Enabled = true;
-            time.Interval = 5000;
-            time.Tick += new EventHandler(timer1_Tick);
-            time.Start();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer1.Stop();
-
+            //建立網頁連結
             WebRequest request = WebRequest.Create(@"https://www.playsport.cc/livescore.php?aid=3");
             WebResponse response;
             StreamReader reader;
             request.Method = "GET";
+            //取得網頁回應
             response = request.GetResponse();
+            //放入StreamReader
             reader = new StreamReader(response.GetResponseStream());
+            //將Stream讀入字串
             result = reader.ReadToEnd();
             reader.Close();
             response.Close();
             finalResult = "";
+            //取得需要的資料放入finalResult
             getMatchList();
+            //轉換中文及去除無效字元
             finalResult = changeENGtoCH(finalResult);
+            //放入ListBox
             putInList(finalResult);
-
-            Random random = new Random();
-            timer1.Interval = random.Next(5, 20) * 1000 ;
-            timer1.Start();
         }
 
         public void getMatchList()
@@ -56,7 +47,7 @@ namespace TestGet
             string dateTime = DateTime.Now.AddDays(-1).ToString("yyyyMMdd");
             string compare = "\"NBA_" + dateTime + "_";
             string timeFix1 = "", timeFix2 = "";
-            int gameMatch = 0, gameAscore = 0, gameHscore = 0, gameQname = 0, gameTime = 0;
+            int gameMatch = 0, gameQname = 0, gameTime = 0;
             int A1score = 0, A2score = 0, A3score = 0, A4score = 0, AOTscore = 0;
             int H1score = 0, H2score = 0, H3score = 0, H4score = 0, HOTscore = 0;
 
@@ -67,9 +58,7 @@ namespace TestGet
                 result = result.Remove(0, gameMatch + 14);
                 finalResult += result.Substring(0, 7) + "\n";
 
-                gameAscore = result.IndexOf("_asr_big\">");
-                result = result.Remove(0, gameAscore + 10);
-                finalResult += result.Substring(0, 3) + " : ";
+                finalADD("_asr_big\">",3," : ");
 
                 gameQname = result.IndexOf("_inning_big\">");
                 result = result.Remove(0, gameQname + 13);
@@ -81,9 +70,7 @@ namespace TestGet
                 timeFix2 = result.Substring(0, 80).Replace(" ", "");
                 timeFix2 = timeFix2.Replace("\n", "");
 
-                gameHscore = result.IndexOf("_hsr_big\">");
-                result = result.Remove(0, gameHscore + 10);
-                finalResult += result.Substring(0, 3) + "\n";
+                finalADD("_hsr_big\">", 3, "\n");
 
                 finalResult += timeFix1 + " " + timeFix2 + "\n";
 
@@ -179,7 +166,7 @@ namespace TestGet
                 }
                 else
                 {
-                    finalResult = finalResult.Remove(finalResult.Length - 1,1);
+                    finalResult = finalResult.Remove(finalResult.Length - 1, 1);
                     finalResult += "\n";
                 }
             }
@@ -193,7 +180,7 @@ namespace TestGet
             "GS", "DEN", "POR", "MEM", "LAC", "OKC", "LAL", "NO", "SAC", "SA", "HOU", "UTA", "MIN", "DAL", "PHO"};
             string[] teamNameC = {"暴龍", "公鹿", "溜馬", "塞爾提克", "76人", "活塞", "黃蜂", "魔術", "籃網", "熱火", "巫師", "公牛", "尼克", "老鷹", "騎士",
             "勇士", "金塊", "拓荒者", "灰熊", "快艇", "雷霆", "湖人", "鵜鶘", "國王", "馬刺", "火箭", "爵士", "灰狼", "獨行俠", "太陽"};
-            for(int i = 0; i < teamNameC.Length; i++)
+            for (int i = 0; i < teamNameC.Length; i++)
             {
                 match = match.Replace(teamNameE[i], teamNameC[i]);
             }
@@ -209,13 +196,13 @@ namespace TestGet
             while (div1 != -1)
             {
                 div1 = final.IndexOf("(客)對(主)");
-                if(div1 == -1) { break; }
+                if (div1 == -1) { break; }
                 string Aname = "(客) " + final.Substring(0, div1);
-                final=final.Remove(0, div1 + 7);
+                final = final.Remove(0, div1 + 7);
 
                 div2 = final.IndexOf("\n");
                 string Hname = "(主) " + final.Substring(0, div2);
-                final=final.Remove(0, div2 + 1);
+                final = final.Remove(0, div2 + 1);
 
                 div2 = final.IndexOf(" : ");
                 string Ascore = final.Substring(0, div2);
@@ -228,11 +215,11 @@ namespace TestGet
                 string matchScore = "(客) " + Ascore + " : " + Hscore + " (主)";
 
                 div2 = final.IndexOf("\n");
-                string Timename = final.Substring(0, div2).Replace("/span>","");
+                string Timename = final.Substring(0, div2).Replace("/span>", "");
                 final = final.Remove(0, div2 + 1);
 
                 div2 = final.IndexOf("\n");
-                string AQscore = "(客)" + final.Substring(0, div2).Replace("/"," ");
+                string AQscore = "(客)" + final.Substring(0, div2).Replace("/", " ");
                 final = final.Remove(0, div2 + 1);
 
                 div2 = final.IndexOf("\n");
@@ -251,5 +238,35 @@ namespace TestGet
 
         }
 
+        public void finalADD(string key,int get,string endSign)
+        {
+            int position = result.IndexOf(key);
+            result = result.Remove(0, position + key.Length);
+            finalResult += result.Substring(0, get) + endSign;
+        }
+
+        private void reFresh_Click(object sender, EventArgs e)
+        {
+            //建立網頁連結
+            WebRequest request = WebRequest.Create(@"https://www.playsport.cc/livescore.php?aid=3");
+            WebResponse response;
+            StreamReader reader;
+            request.Method = "GET";
+            //取得網頁回應
+            response = request.GetResponse();
+            //放入StreamReader
+            reader = new StreamReader(response.GetResponseStream());
+            //將Stream讀入字串
+            result = reader.ReadToEnd();
+            reader.Close();
+            response.Close();
+            finalResult = "";
+            //取得需要的資料放入finalResult
+            getMatchList();
+            //轉換中文及去除無效字元
+            finalResult = changeENGtoCH(finalResult);
+            //放入ListBox
+            putInList(finalResult);
+        }
     }
 }

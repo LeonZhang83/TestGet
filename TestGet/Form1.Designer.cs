@@ -28,10 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.reFresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -42,18 +41,26 @@
             this.listBox1.Location = new System.Drawing.Point(26, 12);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.listBox1.Size = new System.Drawing.Size(261, 624);
+            this.listBox1.Size = new System.Drawing.Size(261, 544);
             this.listBox1.TabIndex = 1;
             // 
-            // timer1
+            // reFresh
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.reFresh.Font = new System.Drawing.Font("新細明體", 15F);
+            this.reFresh.Location = new System.Drawing.Point(54, 572);
+            this.reFresh.Name = "reFresh";
+            this.reFresh.Size = new System.Drawing.Size(201, 46);
+            this.reFresh.TabIndex = 2;
+            this.reFresh.Text = "重新整理";
+            this.reFresh.UseVisualStyleBackColor = true;
+            this.reFresh.Click += new System.EventHandler(this.reFresh_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 651);
+            this.ClientSize = new System.Drawing.Size(306, 631);
+            this.Controls.Add(this.reFresh);
             this.Controls.Add(this.listBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -64,7 +71,7 @@
 
         #endregion
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button reFresh;
     }
 }
 
